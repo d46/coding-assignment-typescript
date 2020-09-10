@@ -1,37 +1,32 @@
-// First of all sorry i couldn't understand the questins clearly.
-// But it sounds like you may want to control your application with ErrorStacks
-// For the internet 'Exception Handling is a mechanism to handle runtime errors'
-// As you mention we don't have compile time errors in javascript but in typescript we have
-// So returning boolean values or something else will be a distressing way to understand
-// the faults.
-// If there is an error we should see it as an error not a console log.
+class MessageService {
+  get(code: number) {
+    return `${code} # Fetch some message with translation`;
+  }
+}
+export class CustomError {
+  constructor(public code: number, public message: string) {}
+}
+class AdvanceError {
+  private messsageService = new MessageService();
 
-class MyError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'MyError';
+  private getMessage(code: number) {
+    return this.messsageService.get(code);
+  }
+
+  private getError(code: number) {
+    const message = this.getMessage(code);
+    return new CustomError(code, message);
+  }
+
+  getCustomError() {
+    return this.getError(123);
   }
 }
 
-const errorThrower = () => {
-  throw new MyError('some error');
-};
-
-export const good = (): void => {
-  try {
-    errorThrower();
-  } catch (e) {
-    // We can also differentiate Custom Errors like this
-    if (e instanceof MyError) {
-      throw e;
-    }
+export const numberOrError = (type: number): number | CustomError => {
+  if (type === 1) {
+    const error = new AdvanceError();
+    return error.getCustomError();
   }
-};
-
-export const bad = (): void => {
-  try {
-    errorThrower();
-  } catch (e) {
-    return console.log(e);
-  }
+  return type;
 };
