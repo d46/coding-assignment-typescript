@@ -1,14 +1,19 @@
-import { validator, errorResponse, customErrorResponse, CustomWrongResponseError } from './my-memo';
+import { hundredTimes } from './my-memo';
 
 describe('my-memo', () => {
-  it('validator with error response', () => {
-    expect(validator(() => errorResponse()).valid).toStrictEqual(false);
+  it('new response for 1', () => {
+    expect(hundredTimes(1)).toStrictEqual(100);
   });
 
-  it('cached custom error response', () => {
-    // Cache CustomWrongResponseError
-    validator(() => customErrorResponse());
+  it('cached response for 1', () => {
+    expect(hundredTimes(1)).toStrictEqual(100);
+  });
 
-    expect(validator().error).toBeInstanceOf(CustomWrongResponseError);
+  it('new response for 2', () => {
+    expect(hundredTimes(2)).toStrictEqual(200);
+  });
+
+  it('cached response for 2', () => {
+    expect(hundredTimes(2)).toStrictEqual(200);
   });
 });

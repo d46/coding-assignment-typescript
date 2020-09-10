@@ -1,42 +1,22 @@
-export class WrongResponseError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'WrongResponseError';
-  }
-}
 
-export class CustomWrongResponseError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'CustomWrongResponseError';
-  }
-}
+const memory = new Map<number, number>();
+export const hundredTimes = (param: number): number => {
+  if (memory.has(param)) {
+    console.log(`We have cache for param: ${param}`);
 
-interface CustomResponse {
-  valid: boolean;
-  error: Error;
-}
-
-export const errorResponse = (): CustomResponse => {
-  return {
-    valid: false,
-    error: new WrongResponseError('error occured'),
-  };
-};
-
-export const customErrorResponse = (): CustomResponse => {
-  return {
-    valid: false,
-    error: new CustomWrongResponseError('error occured'),
-  };
-};
-
-let cacheOnModule: CustomResponse;
-export const validator = (validatorFn?: () => CustomResponse): CustomResponse => {
-  if (!validatorFn) {
-    return cacheOnModule;
+    return memory.get(param) as number;
   }
 
-  cacheOnModule = validatorFn();
-  return cacheOnModule;
+  console.log(`New calculation is on progress for param: ${param}`);
+
+  let newValue = 0;
+  // Brilliant saddleback search algo
+  for (let e = 0; e < param; e++) {
+    for (let i = 0; i < 100; i++) {
+      newValue += 1;
+    }
+  }
+
+  memory.set(param, newValue);
+  return newValue;
 };
