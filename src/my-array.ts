@@ -1,15 +1,17 @@
-export default class MyArray {
-  private stack: (string | number)[] = [];
-
-  add(item: string | number): void {
-    this.stack.push(item);
+export default class MyArray<T extends number | string> extends Map {
+  add(item: T): void {
+    this.set(item, item);
   }
 
-  remove(item: string | number): void {
-    this.stack = this.stack.filter((_item) => _item !== item);
+  remove(item: T): void {
+    this.delete(item);
   }
 
-  getvalues(): (string | number)[] {
-    return this.stack;
+  getvalues(): T[] {
+    const values: T[] = [];
+    for (const keyValue of this.entries()) {
+      values.push(keyValue[0]);
+    }
+    return values;
   }
 }
